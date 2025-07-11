@@ -594,4 +594,84 @@ router.post("/cart/checkoutCart", (req, res, next) => authMiddleware.verifyToken
 
 router.post("/orders/cancelOrder", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), paymentController.cancelOrder);
 
+/**
+ * @swagger
+ * tags:
+ *   name: Product Feedback
+ *   description: Rating and reviewing products
+ */
+
+/**
+ * @swagger
+ * /product/rateProduct:
+ *   put:
+ *     summary: Rate a purchased product
+ *     tags: [Product Feedback]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [productId, rating]
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 description: ID of the product to rate
+ *               rating:
+ *                 type: number
+ *                 minimum: 1
+ *                 maximum: 5
+ *     responses:
+ *       200:
+ *         description: Rating submitted successfully
+ *       400:
+ *         description: Already rated or validation error
+ *       403:
+ *         description: User has not purchased the product
+ *       404:
+ *         description: Product not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.put('/product/rateProduct', (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.rateProduct);
+
+/**
+ * @swagger
+ * /product/reviews:
+ *   post:
+ *     summary: Submit a review for a purchased product
+ *     tags: [Product Feedback]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [id, review]
+ *             properties:
+ *               id:
+ *                 type: string
+ *                 description: ID of the product to review
+ *               review:
+ *                 type: string
+ *                 description: The review text
+ *     responses:
+ *       200:
+ *         description: Review submitted successfully
+ *       400:
+ *         description: Already reviewed or validation error
+ *       403:
+ *         description: User has not purchased the product
+ *       404:
+ *         description: Product not found
+ */
+
+router.post("/product/reviews", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.reviewProduct);
+
 export default router;

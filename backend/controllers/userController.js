@@ -224,6 +224,76 @@ const getCart = async (req, res) => {
   }
 };
 
+const rateProduct = async (req, res) => {
+  const { productId, rating } = req.body;
+  const userId = req.user._id;
+
+  try {
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Ensure user purchased the product
+    if (!product.purchasers.includes(userId)) {
+      return res.status(403).json({ error: 'You must purchase the product to rate it' });
+    }
+
+    // Check if user already rated
+    const existingRating = product.rating.find(r => r.userId.toString() === userId.toString());
+    if (existingRating) {
+      return res.status(400).json({ error: 'You have already rated this product' });
+    }
+
+    // Add rating
+    product.rating.push({ userId, rating });
+
+    // Recalculate average rating
+    const totalRatings = product.rating.length;
+    const sumRatings = product.rating.reduce((sum, r) => sum + r.rating, 0);
+    product.averageRating = totalRatings ? sumRatings / totalRatings : 0;
+
+    await product.save();
+
+    res.status(200).json({
+      message: 'Rating submitted successfully',
+      averageRating: product.averageRating
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const reviewProduct = async (req, res) => {
+  const { review, id } = req.body; // `id` = productId
+  const userId = req.user._id;
+
+  try {
+    const product = await productModel.findById(id);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    // Check if user purchased the product
+    if (!product.purchasers.includes(userId)) {
+      return res.status(403).json({ error: 'You must purchase the product to review it' });
+    }
+
+    // Check if user already reviewed the product (optional)
+    const existingReview = product.reviews.find(r => r.userId.toString() === userId.toString());
+    if (existingReview) {
+      return res.status(400).json({ error: 'You have already reviewed this product' });
+    }
+
+    // Add the review
+    product.reviews.push({ userId, review });
+    await product.save();
+
+    res.status(200).json({ message: 'Review submitted successfully', reviews: product.reviews });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 export default {
   viewProducts,
@@ -233,5 +303,7 @@ export default {
   addProductToCart,
   removeProductFromCart,
   changeCartQuantity,
-  getCart
+  getCart,
+  rateProduct,
+  reviewProduct
 };
