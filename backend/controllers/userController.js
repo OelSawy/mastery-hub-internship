@@ -105,9 +105,133 @@ const sortProducts = async (req, res) => {
   }
 };
 
+const addProductToCart = async (req, res) => {
+  try {
+    const id = req.user._id;
+    const { productId, quantity } = req.body;
+
+    if (!productId || typeof quantity !== 'number') {
+      return res.status(400).json({ error: 'Product ID and quantity are required' });
+    }
+
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    // Check if product already in cart
+    const existingItem = user.cart.find(item => item.productId.toString() === productId);
+
+    if (existingItem) {
+      // Update quantity
+      existingItem.quantity += quantity;
+    } else {
+      user.cart.push({ productId, quantity });
+    }
+
+    await user.save();
+
+    res.status(200).json({ message: 'Product added to cart successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const removeProductFromCart = async (req, res) => {
+  try {
+    const id = req.user._id;
+    const { productId } = req.body;
+
+    if (!productId) {
+      return res.status(400).json({ error: 'Product ID is required' });
+    }
+
+    const updatedUser = await userModel.findByIdAndUpdate(
+      id,
+      { $pull: { cart: { productId } } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Product removed from cart successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const changeCartQuantity = async (req, res) => {
+  try {
+    const id = req.user._id;
+    const { productId, quantity } = req.body;
+
+    if (!productId || typeof quantity !== 'number') {
+      return res.status(400).json({ error: 'Product ID and quantity are required' });
+    }
+
+    const product = await productModel.findById(productId);
+    if (!product) {
+      return res.status(404).json({ error: 'Product not found' });
+    }
+
+    const user = await userModel.findById(id);
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const cartItem = user.cart.find(item => item.productId.toString() === productId);
+    if (!cartItem) {
+      return res.status(404).json({ error: 'Product not in cart' });
+    }
+
+    cartItem.quantity = quantity;
+    await user.save();
+
+    res.status(200).json({ message: 'Cart quantity updated successfully' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+const getCart = async (req, res) => {
+  try {
+    const id = req.user._id;
+
+    const user = await userModel.findById(id).populate({
+      path: 'cart.productId',
+      select: 'name price description quantity' // Adjust based on your product model fields
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const populatedCart = user.cart.map(item => ({
+      product: item.productId,
+      quantity: item.quantity
+    }));
+
+    res.status(200).json({ cart: populatedCart });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 export default {
   viewProducts,
   searchProduct,
   filterProducts,
   sortProducts,
+  addProductToCart,
+  removeProductFromCart,
+  changeCartQuantity,
+  getCart
 };
