@@ -362,4 +362,56 @@ router.delete(
   adminController.deleteProduct
 );
 
+/**
+ * @swagger
+ * /api/admin/viewOrders:
+ *   get:
+ *     summary: View all orders with user information
+ *     tags: [Admin products]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: List of all orders with user details
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 orders:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       userId:
+ *                         type: object
+ *                         properties:
+ *                           firstName:
+ *                             type: string
+ *                           lastName:
+ *                             type: string
+ *                           email:
+ *                             type: string
+ *                       products:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             productId:
+ *                               type: string
+ *                             quantity:
+ *                               type: number
+ *                       totalAmount:
+ *                         type: number
+ *                       createdAt:
+ *                         type: string
+ *                         format: date-time
+ *       500:
+ *         description: Error fetching orders
+ */
+
+router.get("/viewOrders", adminController.viewOrders);
+
 export default router;

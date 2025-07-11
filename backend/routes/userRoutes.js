@@ -9,6 +9,7 @@ import express from "express";
 import authController from "../controllers/services/authController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import userController from "../controllers/userController.js";
+import paymentController from "../controllers/services/paymentController.js";
 
 const router = express.Router();
 
@@ -349,5 +350,248 @@ router.get(
   (req, res, next) => authMiddleware.verifyToken(req, res, next, ["user"]),
   userController.sortProducts
 );
+
+/**
+ * @swagger
+ * tags:
+ *   name: Cart
+ *   description: Endpoints for managing the user cart
+ */
+
+/**
+ * @swagger
+ * /api/user/cart/addProduct:
+ *   post:
+ *     summary: Add a product to the cart
+ *     tags: [Cart]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - productId
+ *               - quantity
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 description: ID of the product to add
+ *               quantity:
+ *                 type: number
+ *                 description: Quantity of the product to add
+ *     responses:
+ *       200:
+ *         description: Product added to cart successfully
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: Product or user not found
+ *       500:
+ *         description: Server error
+ */
+
+router.post("/cart/addProduct", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.addProductToCart);
+
+/**
+ * @swagger
+ * /api/user/cart/removeProduct:
+ *   post:
+ *     summary: Remove a product from the cart
+ *     tags: [Cart]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - productId
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 description: ID of the product to remove
+ *     responses:
+ *       200:
+ *         description: Product removed from cart successfully
+ *       400:
+ *         description: Missing product ID
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+
+router.post("/cart/removeProduct", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.removeProductFromCart);
+
+/**
+ * @swagger
+ * /api/user/cart/changeQuantity:
+ *   post:
+ *     summary: Change the quantity of a product in the cart
+ *     tags: [Cart]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - productId
+ *               - quantity
+ *             properties:
+ *               productId:
+ *                 type: string
+ *                 description: ID of the product
+ *               quantity:
+ *                 type: number
+ *                 description: New quantity for the product
+ *     responses:
+ *       200:
+ *         description: Cart quantity updated successfully
+ *       400:
+ *         description: Invalid input
+ *       404:
+ *         description: Product or user not found
+ *       500:
+ *         description: Server error
+ */
+
+router.post("/cart/changeQuantity", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.changeCartQuantity);
+
+/**
+ * @swagger
+ * /user/cart/getCart:
+ *   get:
+ *     summary: Get the user's cart with product details
+ *     tags: [Cart]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Returns the user's cart with populated product data
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 cart:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       product:
+ *                         type: object
+ *                         properties:
+ *                           _id:
+ *                             type: string
+ *                           name:
+ *                             type: string
+ *                           price:
+ *                             type: number
+ *                           description:
+ *                             type: string
+ *                           quantity:
+ *                             type: number
+ *                       quantity:
+ *                         type: number
+ *       404:
+ *         description: User not found
+ *       500:
+ *         description: Server error
+ */
+
+router.get('/cart/getCart', (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.getCart);
+
+/**
+ * @swagger
+ * tags:
+ *   name: User Orders
+ *   description: Endpoints for placing and cancelling user orders
+ */
+
+/**
+ * @swagger
+ * /cart/checkoutCart:
+ *   post:
+ *     summary: Checkout the user's cart and create an order
+ *     tags: [User Orders]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [paymentMethod]
+ *             properties:
+ *               paymentMethod:
+ *                 type: string
+ *                 enum: [card, cash]
+ *     responses:
+ *       200:
+ *         description: Order placed successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                 message:
+ *                   type: string
+ *                 order:
+ *                   type: object
+ *                 paymentIntent:
+ *                   type: object
+ *                   nullable: true
+ *       400:
+ *         description: Missing fields or validation error
+ *       404:
+ *         description: User or product not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.post("/cart/checkoutCart", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), paymentController.checkoutCart);
+
+/**
+ * @swagger
+ * /orders/cancelOrder:
+ *   post:
+ *     summary: Cancel an existing order if it's not yet shipped or delivered
+ *     tags: [User Orders]
+ *     security:
+ *       - cookieAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [orderId]
+ *             properties:
+ *               orderId:
+ *                 type: string
+ *                 description: The ID of the order to cancel
+ *     responses:
+ *       200:
+ *         description: Order cancelled successfully
+ *       400:
+ *         description: Order already shipped, delivered, or cancelled
+ *       404:
+ *         description: Order or user not found
+ *       500:
+ *         description: Internal server error
+ */
+
+router.post("/orders/cancelOrder", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), paymentController.cancelOrder);
 
 export default router;

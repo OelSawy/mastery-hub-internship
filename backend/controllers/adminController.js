@@ -159,9 +159,19 @@ const deleteProduct = async (req, res) => {
     }
 }
 
+const viewOrders = async (req, res) => {
+  try {
+    const orders = await orderModel.find().populate("userId", "firstName lastName email");
+    res.status(200).json({ orders });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching orders", error: error.message });
+  }
+};
+
 export default {
   addProduct,
   uploadPicture,
   editProduct,
-  deleteProduct
+  deleteProduct,
+  viewOrders
 };
