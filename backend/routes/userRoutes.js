@@ -5,15 +5,16 @@
  *   description: User authentication and account management
  */
 
-import express from 'express';
-import authController from '../controllers/services/authController.js';
-import authMiddleware from '../middleware/authMiddleware.js';
+import express from "express";
+import authController from "../controllers/services/authController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import userController from "../controllers/userController.js";
 
 const router = express.Router();
 
 /**
  * @swagger
- * /register:
+ * /api/user/register:
  *   post:
  *     summary: Register a new user
  *     tags: [User Auth]
@@ -42,11 +43,11 @@ const router = express.Router();
  *         description: Validation error
  */
 
-router.post('/register', authController.register);
+router.post("/register", authController.register);
 
 /**
  * @swagger
- * /login:
+ * /api/user/login:
  *   post:
  *     summary: Login as a user
  *     tags: [User Auth]
@@ -72,11 +73,11 @@ router.post('/register', authController.register);
  *         description: Unauthorized
  */
 
-router.post('/login', authController.login);
+router.post("/login", authController.login);
 
 /**
  * @swagger
- * /refresh-token:
+ * /api/user/refresh-token:
  *   post:
  *     summary: Refresh access token
  *     tags: [User Auth]
@@ -87,12 +88,15 @@ router.post('/login', authController.login);
  *         description: Missing or invalid token
  */
 
-router.post('/refresh-token', authMiddleware.checkBlacklistedToken, authController.refreshToken);
-
+router.post(
+  "/refresh-token",
+  authMiddleware.checkBlacklistedToken,
+  authController.refreshToken
+);
 
 /**
  * @swagger
- * /logout:
+ * /api/user/logout:
  *   post:
  *     summary: Log out the user
  *     tags: [User Auth]
@@ -103,11 +107,11 @@ router.post('/refresh-token', authMiddleware.checkBlacklistedToken, authControll
  *         description: Refresh token not found
  */
 
-router.post('/logout', authController.logout);
+router.post("/logout", authController.logout);
 
 /**
  * @swagger
- * /requestOtp:
+ * /api/user/requestOtp:
  *   post:
  *     summary: Request a reset OTP
  *     tags: [User Auth]
@@ -129,11 +133,11 @@ router.post('/logout', authController.logout);
  *         description: OTP sent successfully
  */
 
-router.post('/requestOtp', authController.requestOtp);
+router.post("/requestOtp", authController.requestOtp);
 
 /**
  * @swagger
- * /verifyOTP:
+ * /api/user/verifyOTP:
  *   post:
  *     summary: Verify OTP for password reset
  *     tags: [User Auth]
@@ -158,11 +162,11 @@ router.post('/requestOtp', authController.requestOtp);
  *         description: Invalid or expired OTP
  */
 
-router.post('/verifyOTP', authController.verifyOTP);
+router.post("/verifyOTP", authController.verifyOTP);
 
 /**
  * @swagger
- * /changePassword:
+ * /api/user/changePassword:
  *   put:
  *     summary: Change password for logged-in user
  *     tags: [User Auth]
@@ -189,11 +193,16 @@ router.post('/verifyOTP', authController.verifyOTP);
  *         description: Validation error
  */
 
-router.put('/changePassword', (req, res, next) => authMiddleware.verifyToken(req, res, next, ['admin', 'user']), authController.changePassword);
+router.put(
+  "/changePassword",
+  (req, res, next) =>
+    authMiddleware.verifyToken(req, res, next, ["admin", "user"]),
+  authController.changePassword
+);
 
 /**
  * @swagger
- * /changeForgotPassword:
+ * /api/user/changeForgotPassword:
  *   put:
  *     summary: Change password after OTP verification
  *     tags: [User Auth]
@@ -216,6 +225,129 @@ router.put('/changePassword', (req, res, next) => authMiddleware.verifyToken(req
  *         description: Password changed successfully
  */
 
-router.put('/changeForgotPassword', authController.changeForgotPassword);
+router.put("/changeForgotPassword", authController.changeForgotPassword);
+
+/**
+ * @swagger
+ * tags:
+ *   name: User Products
+ *   description: User endpoints for viewing and searching products
+ */
+
+/**
+ * @swagger
+ * /api/user/viewProducts:
+ *   get:
+ *     summary: View all products
+ *     tags: [User Products]
+ *     responses:
+ *       200:
+ *         description: A list of products
+ *       500:
+ *         description: Error retrieving products
+ */
+
+router.get(
+  "/viewProducts",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["user"]),
+  userController.viewProducts
+);
+
+/**
+ * @swagger
+ * /api/user/searchProducts:
+ *   get:
+ *     summary: Search products by name
+ *     tags: [User Products]
+ *     parameters:
+ *       - in: query
+ *         name: name
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The name or part of the name of the product
+ *     responses:
+ *       200:
+ *         description: Matching products
+ *       400:
+ *         description: Invalid product name
+ *       404:
+ *         description: No matching products found
+ */
+
+router.get(
+  "/searchProducts",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["user"]),
+  userController.searchProduct
+);
+
+/**
+ * @swagger
+ * /api/user/filterProducts:
+ *   get:
+ *     summary: Filter products by price and rating
+ *     tags: [User Products]
+ *     parameters:
+ *       - in: query
+ *         name: minPrice
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: Minimum product price
+ *       - in: query
+ *         name: maxPrice
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: Maximum product price
+ *       - in: query
+ *         name: averageRating
+ *         schema:
+ *           type: number
+ *         required: false
+ *         description: Minimum average rating
+ *     responses:
+ *       200:
+ *         description: Filtered product list
+ *       400:
+ *         description: Invalid rating or parameters
+ *       404:
+ *         description: No matching products
+ */
+
+router.get(
+  "/filterProducts",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["user"]),
+  userController.filterProducts
+);
+
+/**
+ * @swagger
+ * /api/user/sortProducts:
+ *   get:
+ *     summary: Sort products by price (ascending or descending)
+ *     tags: [User Products]
+ *     parameters:
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [low, high]
+ *         required: true
+ *         description: Sorting order (low for ascending, high for descending)
+ *     responses:
+ *       200:
+ *         description: Sorted product list
+ *       400:
+ *         description: Invalid order value
+ *       404:
+ *         description: No products found
+ */
+
+router.get(
+  "/sortProducts",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["user"]),
+  userController.sortProducts
+);
 
 export default router;

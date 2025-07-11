@@ -1,3 +1,14 @@
+import express from "express";
+import authController from "../controllers/services/authController.js";
+import authMiddleware from "../middleware/authMiddleware.js";
+import adminController from "../controllers/adminController.js";
+import multer from "multer";
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+
+const router = express.Router();
+
 /**
  * @swagger
  * tags:
@@ -5,15 +16,9 @@
  *   description: Admin authentication and account management
  */
 
-import express from "express";
-import authController from "../controllers/services/authController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
-
-const router = express.Router();
-
 /**
  * @swagger
- * /addAdmin:
+ * /api/admin/addAdmin:
  *   post:
  *     summary: Register a new admin
  *     tags: [Admin Auth]
@@ -42,7 +47,7 @@ router.post("/addAdmin", authController.addAdmin);
 
 /**
  * @swagger
- * /admin/login:
+ * /api/admin/login:
  *   post:
  *     summary: Admin login
  *     tags: [Admin Auth]
@@ -69,7 +74,7 @@ router.post("/login", authController.login);
 
 /**
  * @swagger
- * /admin/refresh-token:
+ * /api/admin/refresh-token:
  *   post:
  *     summary: Refresh admin access token
  *     tags: [Admin Auth]
@@ -88,7 +93,7 @@ router.post(
 
 /**
  * @swagger
- * /admin/logout:
+ * /api/admin/logout:
  *   post:
  *     summary: Logout admin user
  *     tags: [Admin Auth]
@@ -101,7 +106,7 @@ router.post("/logout", authController.logout);
 
 /**
  * @swagger
- * /admin/requestOtp:
+ * /api/admin/requestOtp:
  *   post:
  *     summary: Request OTP for admin password reset
  *     tags: [Admin Auth]
@@ -127,7 +132,7 @@ router.post("/requestOtp", authController.requestOtp);
 
 /**
  * @swagger
- * /admin/verifyOTP:
+ * /api/admin/verifyOTP:
  *   post:
  *     summary: Verify OTP for admin password reset
  *     tags: [Admin Auth]
@@ -156,7 +161,7 @@ router.post("/verifyOTP", authController.verifyOTP);
 
 /**
  * @swagger
- * /admin/changePassword:
+ * /api/admin/changePassword:
  *   put:
  *     summary: Change admin password (requires authentication)
  *     tags: [Admin Auth]
@@ -192,7 +197,7 @@ router.put(
 
 /**
  * @swagger
- * /admin/changeForgotPassword:
+ * /api/admin/changeForgotPassword:
  *   put:
  *     summary: Change admin password after OTP verification
  *     tags: [Admin Auth]
@@ -216,5 +221,145 @@ router.put(
  */
 
 router.put("/changeForgotPassword", authController.changeForgotPassword);
+
+/**
+ * @swagger
+ * tags:
+ *   name: Admin products
+ *   description: Admin products management
+ */
+
+/**
+ * @swagger
+ * /api/admin/addProduct:
+ *   post:
+ *     summary: Add a new product
+ *     tags: [Admin products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required: [name, description, price, quantity]
+ *             properties:
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               quantity:
+ *                 type: number
+ *     responses:
+ *       201:
+ *         description: Product added successfully
+ *       400:
+ *         description: Validation error
+ */
+
+router.post(
+  "/addProduct",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["admin"]),
+  adminController.addProduct
+);
+
+/**
+ * @swagger
+ * /api/admin/uploadPicture:
+ *   post:
+ *     summary: Upload a picture for a product
+ *     tags: [Admin products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *     responses:
+ *       200:
+ *         description: Uploaded successfully
+ *       400:
+ *         description: Missing image file
+ */
+
+router.post(
+  "/uploadPicture",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["admin"]),
+  upload.single("file"),
+  adminController.uploadPicture
+);
+
+/**
+ * @swagger
+ * /api/admin/editProduct:
+ *   put:
+ *     summary: Edit an existing product
+ *     tags: [Admin products]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: string
+ *               name:
+ *                 type: string
+ *               description:
+ *                 type: string
+ *               price:
+ *                 type: number
+ *               quantity:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Product updated successfully
+ *       400:
+ *         description: Validation error or ID format issue
+ *       404:
+ *         description: Product not found
+ */
+
+router.put(
+  "/editProduct",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["admin"]),
+  adminController.editProduct
+);
+
+/**
+ * @swagger
+ * /api/admin/deleteProduct/{id}:
+ *   delete:
+ *     summary: Delete a product
+ *     tags: [Admin products]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The product ID
+ *     responses:
+ *       200:
+ *         description: Product deleted successfully
+ *       400:
+ *         description: Invalid product ID format
+ *       404:
+ *         description: Product not found
+ */
+
+router.delete(
+  "/deleteProduct/:id",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["admin"]),
+  adminController.deleteProduct
+);
 
 export default router;
