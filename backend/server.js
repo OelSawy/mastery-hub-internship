@@ -1,7 +1,9 @@
 // Import necessary modules
 import express from 'express';
 import dotenv from 'dotenv';    
-import cors from 'cors';
+// import cors from 'cors';
+import userRoutes from './routes/userRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
 import { connectDB } from './config/db.js';
 import { swaggerUi, swaggerDocs } from './config/swagger.js'; // Import Swagger setup
 import cookieParser from 'cookie-parser';
@@ -12,17 +14,17 @@ dotenv.config();
 const app = express();
 
 // Enable express to parse JSON
-app.use(
-  cors({
-      origin: 'http://localhost:5173',
-      credentials: true,
-  })
-);
+// app.use(
+//   cors({
+//       origin: 'http://localhost:5173',
+//       credentials: true,
+//   })
+// );
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static('controllers'));
-app.use(express.static('frontend'));
+// app.use(express.static('frontend'));
 
 // Setup Swagger UI
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs)); // Serve Swagger documentation
@@ -46,11 +48,5 @@ app.get("/home", (req, res) => {
 });
 
 // Define your API routes
-// app.use('/api/seller', sellerRoutes); // Seller-related routes
-// app.use('/api/admin', adminRoutes);   // Admin-related routes
-// app.use('/api/tourist', touristRoutes); // Tourist-related routes
-// app.use('/api/advertiser', advertiserRoutes); // Advertiser-related routes
-// app.use('/api/tourismGovernor', tourismGovernorRoutes); // Tourism governor routes
-// app.use('/api/tourGuide', tourGuideRoutes); // Tour guide routes
-// app.use('/api/auth', authRoutes); // Authentication routes
-// app.use('/api/guest', guestRoutes); // Authentication routes
+app.use('/api/user', userRoutes);
+app.use('/api/admin', adminRoutes);
