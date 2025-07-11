@@ -6,7 +6,7 @@ const swaggerOptions = {
   definition: {
     openapi: '3.0.0', // OpenAPI version
     info: {
-      title: 'Ecommerce App', // Title of the API
+      title: 'Marketplace Hub', // Title of the API
       version: '1.0.0', // Version of the API
       description: 'API documentation for your project.',
     },
