@@ -19,7 +19,9 @@ const checkoutCart = async (req, res) => {
   const { paymentMethod } = req.body;
 
   if (!paymentMethod) {
-    return res.status(400).json({ error: "Missing required field: paymentMethod" });
+    return res
+      .status(400)
+      .json({ error: "Missing required field: paymentMethod" });
   }
 
   try {
@@ -34,12 +36,15 @@ const checkoutCart = async (req, res) => {
     for (const item of user.cart) {
       const product = await productModel.findById(item.productId);
       if (!product) {
-        return res.status(404).json({ error: `Product with ID ${item.productId} not found` });
+        return res
+          .status(404)
+          .json({ error: `Product with ID ${item.productId} not found` });
       }
 
-      // Deduct quantity and update purchasers
       if (product.quantity < item.quantity) {
-        return res.status(400).json({ error: `Not enough stock for product ${product.name}` });
+        return res
+          .status(400)
+          .json({ error: `Not enough stock for ${product.name}` });
       }
 
       product.quantity -= item.quantity;
@@ -58,13 +63,13 @@ const checkoutCart = async (req, res) => {
       });
     }
 
-    let paymentIntent;
+    let paymentIntent = null;
     if (paymentMethod === "card") {
       paymentIntent = await stripe.paymentIntents.create({
-        amount: totalAmount * 100, // Stripe expects cents
+        amount: Math.round(totalAmount * 100),
         currency: "usd",
         payment_method_types: ["card"],
-        payment_method: "pm_card_visa",
+        payment_method: "pm_card_visa", // Simulated method
         confirm: true,
       });
     }
@@ -84,14 +89,16 @@ const checkoutCart = async (req, res) => {
 
     await sendProductInvoice(order);
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
-      message: paymentMethod === "card" ? "Payment successful" : "Cash on delivery",
+      message:
+        paymentMethod === "card" ? "Payment successful" : "Cash on Delivery",
       order,
       ...(paymentIntent && { paymentIntent }),
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error("Checkout Error:", error);
+    return res.status(500).json({ error: error.message });
   }
 };
 
@@ -106,7 +113,9 @@ const cancelOrder = async (req, res) => {
     if (!user) return res.status(404).json({ error: "User not found" });
 
     if (["Cancelled", "Shipped", "Delivered"].includes(order.status)) {
-      return res.status(400).json({ error: `Order is already ${order.status.toLowerCase()}` });
+      return res
+        .status(400)
+        .json({ error: `Order is already ${order.status.toLowerCase()}` });
     }
 
     for (const item of order.products) {
@@ -115,7 +124,7 @@ const cancelOrder = async (req, res) => {
 
       product.quantity += item.quantity;
       product.purchasers = product.purchasers.filter(
-        purchaserId => purchaserId.toString() !== user._id.toString()
+        (purchaserId) => purchaserId.toString() !== user._id.toString()
       );
       await product.save();
     }
@@ -125,7 +134,9 @@ const cancelOrder = async (req, res) => {
 
     await sendCancellationNotice(order);
 
-    res.status(200).json({ success: true, message: "Order cancelled successfully" });
+    res
+      .status(200)
+      .json({ success: true, message: "Order cancelled successfully" });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -149,7 +160,9 @@ const sendProductInvoice = async (order) => {
   }
 
   const now = new Date(order.orderDate);
-  const formattedDate = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+  const formattedDate = `${now.getDate()}-${
+    now.getMonth() + 1
+  }-${now.getFullYear()}`;
 
   const emailContent = {
     sender: { name: "Marketplace Hub", email: "nnnh7240@gmail.com" },
@@ -187,7 +200,9 @@ const sendCancellationNotice = async (order) => {
   }
 
   const now = new Date();
-  const formattedDate = `${now.getDate()}-${now.getMonth() + 1}-${now.getFullYear()}`;
+  const formattedDate = `${now.getDate()}-${
+    now.getMonth() + 1
+  }-${now.getFullYear()}`;
 
   const emailContent = {
     sender: { name: "Marketplace Hub", email: "nnnh7240@gmail.com" },

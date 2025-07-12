@@ -1,7 +1,7 @@
 // Import necessary modules
 import express from 'express';
 import dotenv from 'dotenv';    
-// import cors from 'cors';
+import cors from 'cors';
 import userRoutes from './routes/userRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import { connectDB } from './config/db.js';
@@ -14,12 +14,12 @@ dotenv.config();
 const app = express();
 
 // Enable express to parse JSON
-// app.use(
-//   cors({
-//       origin: 'http://localhost:5173',
-//       credentials: true,
-//   })
-// );
+app.use(
+  cors({
+      origin: 'http://localhost:5173',
+      credentials: true,
+  })
+);
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());

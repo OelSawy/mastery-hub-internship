@@ -1,4 +1,5 @@
 import productModel from "../models/product.js";
+import userModel from "../models/user.js";
 
 const viewProducts = async (req, res) => {
   try {
@@ -206,7 +207,7 @@ const getCart = async (req, res) => {
 
     const user = await userModel.findById(id).populate({
       path: 'cart.productId',
-      select: 'name price description quantity' // Adjust based on your product model fields
+      select: 'name price description quantity picture' // Adjust based on your product model fields
     });
 
     if (!user) {
