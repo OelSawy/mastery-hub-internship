@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import "../styles/products.css";
 
 const Products = () => {

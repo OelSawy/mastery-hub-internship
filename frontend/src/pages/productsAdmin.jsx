@@ -4,7 +4,7 @@ import { Header } from "../components/adminHeader.jsx";
 import { DollarSign, Star, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import "../styles/products.css";
 
 const AdminProducts = () => {

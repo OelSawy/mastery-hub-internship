@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import api from "../api.js";
 import { Header } from "../components/userHeader.jsx";
 import { DollarSign, PackageCheck } from "lucide-react";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import "../styles/products.css";
 
 const UserOrders = () => {

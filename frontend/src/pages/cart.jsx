@@ -4,7 +4,7 @@ import api from '@/api';
 import { DollarSign, Trash2, Plus, Minus } from 'lucide-react';
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import Loading from "@/components/Loading";
+import Loading from "@/components/loading";
 import '../styles/cart.css';
 import { useNavigate } from 'react-router-dom';
 

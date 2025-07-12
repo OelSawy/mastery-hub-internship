@@ -136,3 +136,5 @@ frontend/.vite/
 frontend/.env
 frontend/.env.*.local
 frontend/.eslintcache
+
+.env.docker

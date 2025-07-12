@@ -16,7 +16,7 @@ const app = express();
 // Enable express to parse JSON
 app.use(
   cors({
-      origin: 'http://localhost:5173',
+      origin: 'http://localhost',
       credentials: true,
   })
 );
