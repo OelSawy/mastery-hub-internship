@@ -363,6 +363,46 @@ router.delete(
   adminController.deleteProduct
 );
 
+/**
+ * @swagger
+ * /admin/viewProducts:
+ *   get:
+ *     summary: View all products (admin only)
+ *     tags: [Admin Products]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: Successfully retrieved all products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   _id:
+ *                     type: string
+ *                   name:
+ *                     type: string
+ *                   description:
+ *                     type: string
+ *                   price:
+ *                     type: number
+ *                   quantity:
+ *                     type: number
+ *                   averageRating:
+ *                     type: number
+ *                   purchasers:
+ *                     type: array
+ *                     items:
+ *                       type: string
+ *       401:
+ *         description: Unauthorized (missing or invalid token)
+ *       500:
+ *         description: Error retrieving products
+ */
+
 router.get(
   "/viewProducts",
   (req, res, next) => authMiddleware.verifyToken(req, res, next, ["admin"]),

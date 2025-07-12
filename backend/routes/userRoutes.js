@@ -674,6 +674,60 @@ router.put('/product/rateProduct', (req, res, next) => authMiddleware.verifyToke
 
 router.post("/product/reviews", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.reviewProduct);
 
+/**
+ * @swagger
+ * /orders:
+ *   get:
+ *     summary: Get current user's order history
+ *     tags: [User Orders]
+ *     security:
+ *       - cookieAuth: []
+ *     responses:
+ *       200:
+ *         description: List of user's orders
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 orders:
+ *                   type: array
+ *                   items:
+ *                     type: object
+ *                     properties:
+ *                       _id:
+ *                         type: string
+ *                       orderDate:
+ *                         type: string
+ *                         format: date-time
+ *                       deliveryDate:
+ *                         type: string
+ *                         format: date-time
+ *                       status:
+ *                         type: string
+ *                       paymentMethod:
+ *                         type: string
+ *                       totalPrice:
+ *                         type: number
+ *                       products:
+ *                         type: array
+ *                         items:
+ *                           type: object
+ *                           properties:
+ *                             productId:
+ *                               type: object
+ *                               properties:
+ *                                 name:
+ *                                   type: string
+ *                                 price:
+ *                                   type: number
+ *                             quantity:
+ *                               type: number
+ *       500:
+ *         description: Internal server error
+ */
+
+
 router.get("/orders", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.getUserOrders);
 
 export default router;
