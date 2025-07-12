@@ -3,6 +3,7 @@ import authController from "../controllers/services/authController.js";
 import authMiddleware from "../middleware/authMiddleware.js";
 import adminController from "../controllers/adminController.js";
 import multer from "multer";
+import userController from "../controllers/userController.js";
 
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
@@ -362,6 +363,12 @@ router.delete(
   adminController.deleteProduct
 );
 
+router.get(
+  "/viewProducts",
+  (req, res, next) => authMiddleware.verifyToken(req, res, next, ["admin"]),
+  userController.viewProducts
+);
+
 /**
  * @swagger
  * /api/admin/viewOrders:
@@ -413,5 +420,7 @@ router.delete(
  */
 
 router.get("/viewOrders", adminController.viewOrders);
+
+
 
 export default router;
