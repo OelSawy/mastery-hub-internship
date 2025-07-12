@@ -9,6 +9,9 @@ import AdminLogin from './pages/adminLogin.jsx';
 import AdminViewProducts from './pages/productsAdmin.jsx';
 import AddProduct from './pages/AddProduct.jsx';
 import UploadPicture from './pages/UploadProductPicture.jsx';
+import AdminOrders from './pages/adminOrders.jsx';
+import UserOrders from './pages/userOrders.jsx';
+import EditProduct from './pages/editProduct.jsx';
 
 function App() {
   return (
@@ -23,6 +26,9 @@ function App() {
       <Route path="/adminProducts" element={<AdminViewProducts />} />
       <Route path="/addProduct" element={<AddProduct />} />
       <Route path="/uploadPicture" element={<UploadPicture />} />
+      <Route path="/adminOrders" element={<AdminOrders />} />
+      <Route path="/orders" element={<UserOrders />} />
+      <Route path="/editProduct/:productId" element={<EditProduct />} />
     </Routes>
   );
 }

@@ -95,7 +95,11 @@ const AdminProducts = () => {
                     </p>
                     <Button
                       className="edit-button"
-                      onClick={() => navigate(`/editProduct/${product._id}`)}
+                      onClick={() =>
+                        navigate(`/editProduct/${product._id}`, {
+                          state: { product },
+                        })
+                      }
                     >
                       Edit Product
                     </Button>
