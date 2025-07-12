@@ -1,4 +1,5 @@
 import productModel from "../models/product.js";
+import orderModel from "../models/order.js";
 import mongoose from "mongoose";
 
 const addProduct = async (req, res) => {

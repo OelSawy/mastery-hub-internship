@@ -674,4 +674,6 @@ router.put('/product/rateProduct', (req, res, next) => authMiddleware.verifyToke
 
 router.post("/product/reviews", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.reviewProduct);
 
+router.get("/orders", (req, res, next) => authMiddleware.verifyToken(req, res, next, ['user']), userController.getUserOrders);
+
 export default router;

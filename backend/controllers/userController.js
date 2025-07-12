@@ -1,5 +1,6 @@
 import productModel from "../models/product.js";
 import userModel from "../models/user.js";
+import orderModel from "../models/order.js";
 
 const viewProducts = async (req, res) => {
   try {
@@ -296,6 +297,20 @@ const reviewProduct = async (req, res) => {
   }
 };
 
+const getUserOrders = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const orders = await orderModel
+      .find({ userId })
+      .populate("products.productId", "name price")
+      .sort({ orderDate: -1 });
+
+    res.status(200).json({ orders });
+  } catch (error) {
+    res.status(500).json({ message: "Error fetching user orders", error: error.message });
+  }
+};
+
 export default {
   viewProducts,
   searchProduct,
@@ -306,5 +321,6 @@ export default {
   changeCartQuantity,
   getCart,
   rateProduct,
-  reviewProduct
+  reviewProduct,
+  getUserOrders,
 };
