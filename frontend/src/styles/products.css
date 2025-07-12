@@ -207,3 +207,15 @@
 .mr-2 {
   margin-right: 8px;
 }
+
+.delete-icon {
+  color: black;
+  cursor: pointer;
+  width: 24px;
+  height: 24px;
+  transition: color 0.3s ease;
+}
+
+.delete-icon:hover {
+  color: red;
+}

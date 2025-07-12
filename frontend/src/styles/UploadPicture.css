@@ -1,0 +1,205 @@
+/* UploadPicture.css */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --primary-color: #36827f;
+    --secondary-color: #54a7a4;  
+    --text-color: #333333;
+    --input-background: #ffffff;
+    --input-border: #d1d5db;
+    --input-focus: #666666;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+.upload-picture-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--input-background);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.upload-picture-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #36827f;
+}
+
+.product-details {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: #f8fafc;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+}
+
+.product-details h3 {
+    margin-bottom: 1rem;
+    color: black;
+    font-weight: 600;
+}
+
+.details-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.detail-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--input-border);
+}
+
+.label {
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+.value {
+    color: var(--text-color);
+}
+
+/* File Upload Styling */
+.file-upload-group {
+    margin: 1.5rem 0;
+    position: relative;
+}
+
+.file-upload-container {
+    position: relative;
+    padding: 2rem;
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    background-color: #f8fafc;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.file-upload-container:hover {
+    background-color: #f0f0f0;
+    border-color: var(--secondary-color);
+}
+
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.file-upload-label span {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: black;
+}
+
+.file-upload-label small {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Image Preview Styling */
+.image-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    text-align: center;
+    border: 1px solid var(--input-border);
+    animation: fadeIn 0.3s ease-out;
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    object-fit: contain;
+}
+
+/* Button Styling */
+.upload-button {
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: black;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-button:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+}
+
+.upload-button:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+.upload-button:active {
+    transform: translateY(0);
+}
+
+.no-data {
+    text-align: center;
+    padding: 2rem;
+    color: var(--text-color);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .upload-picture-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .upload-picture-container h2 {
+        font-size: 2rem;
+    }
+
+    .file-upload-container {
+        padding: 1.5rem;
+    }
+    
+    .file-upload-label span {
+        font-size: 1rem;
+    }
+
+    .image-preview img {
+        max-height: 200px;
+    }
+}

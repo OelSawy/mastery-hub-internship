@@ -1,0 +1,242 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+:root {
+    --primary-color: #36827f;
+    --secondary-color: #333333;
+    --text-color: #333333;
+    --input-background: #ffffff;
+    --input-border: #d1d5db;
+    --input-focus: #666666;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body {
+    background-color: #f5f5f5;
+    color: var(--text-color);
+    font-family: 'Poppins', sans-serif;
+}
+
+.add-product-container {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: var(--input-background);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px var(--shadow-color);
+}
+
+.add-product-container h2 {
+    text-align: center;
+    margin-bottom: 1.5rem;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-color);
+}
+
+.add-product-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.input-group {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+#input-icon {
+/* make it in the center beside the input-group */
+    margin-right: 5px;
+}
+.input-group input,
+.input-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.5rem; /* Increased left padding */
+    border: 1px solid var(--input-border);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    outline: none;
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.input-group textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+/* File Upload Styling */
+.file-upload-group {
+    margin: 1.5rem 0;
+}
+
+.file-upload-container {
+    position: relative;
+    padding: 2rem;
+    border: 2px dashed var(--primary-color);
+    border-radius: 8px;
+    background-color: #f8fafc;
+    text-align: center;
+    transition: all 0.3s ease;
+    margin-bottom: 1rem;
+}
+
+.file-upload-container:hover {
+    background-color: #f0f0f0;
+    border-color: var(--secondary-color);
+}
+
+.file-input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.file-upload-label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    pointer-events: none;
+}
+
+.file-upload-label span {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+}
+
+.file-upload-label small {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Image Preview Styling */
+.image-preview {
+    margin-top: 1rem;
+    padding: 1rem;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    text-align: center;
+    border: 1px solid var(--input-border);
+}
+
+.image-preview img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px var(--shadow-color);
+    object-fit: contain;
+}
+
+/* Button Styling */
+button[type="submit"] {
+    background-color: var(--primary-color);
+    color: white;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+button[type="submit"]:hover {
+    background-color: var(--secondary-color);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px var(--shadow-color);
+}
+
+button[type="submit"]:active {
+    transform: translateY(0);
+}
+
+/* Input type number styling */
+input[type="number"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: none; /* WebKit-based browsers */
+    appearance: none;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Placeholder styling */
+::placeholder {
+    color: #9ca3af;
+    opacity: 1;
+}
+
+:-ms-input-placeholder {
+    color: #9ca3af;
+}
+
+::-ms-input-placeholder {
+    color: #9ca3af;
+}
+
+/* Focus styling */
+*:focus {
+    outline: none;
+}
+
+/* Responsive Design */
+@media (max-width: 640px) {
+    .add-product-container {
+        padding: 1.5rem;
+        margin: 1rem;
+    }
+
+    .add-product-container h2 {
+        font-size: 2rem;
+    }
+
+    .input-group input,
+    .input-group textarea {
+        font-size: 0.875rem;
+    }
+
+    .file-upload-container {
+        padding: 1.5rem;
+    }
+    
+    .file-upload-label span {
+        font-size: 1rem;
+    }
+
+    .image-preview img {
+        max-height: 200px;
+    }
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.image-preview {
+    animation: fadeIn 0.3s ease-out;
+}
