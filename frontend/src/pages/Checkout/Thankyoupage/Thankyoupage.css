@@ -1,0 +1,70 @@
+.thankyou-page {
+    min-height: 100vh;
+    background-color: #f9fafb;
+}
+
+.thankyou-container {
+    max-width: 600px;
+    margin: 4rem auto;
+    padding: 3rem 2rem;
+    text-align: center;
+    background: white;
+    border-radius: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.check-icon {
+    margin-bottom: 2rem;
+}
+
+.title {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #111827;
+    margin-bottom: 1rem;
+}
+
+.message {
+    color: #6b7280;
+    margin-bottom: 2rem;
+    line-height: 1.6;
+}
+
+.buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+}
+
+.view-orders-btn {
+    background-color: #54a7a4;
+    color: white;
+}
+
+.view-orders-btn:hover {
+    background-color: #458b88;
+}
+
+.continue-shopping-btn {
+    border: 2px solid #54a7a4;
+    color: #54a7a4;
+}
+
+.continue-shopping-btn:hover {
+    background-color: #f0f9f9;
+}
+
+@media (max-width: 640px) {
+    .thankyou-container {
+        margin: 2rem 1rem;
+        padding: 2rem 1rem;
+    }
+
+    .buttons {
+        flex-direction: column;
+    }
+
+    .title {
+        font-size: 1.5rem;
+    }
+}

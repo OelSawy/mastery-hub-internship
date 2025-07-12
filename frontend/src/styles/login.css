@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&family=Edu+AU+VIC+WA+NT+Guides:wght@400..700&display=swap');
+
+:root {
+  --primary-color: #36827f;
+  --secondary-color: #54a7a4;
+}
+
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fffaf0;
+  padding: 20px;
+  font-family: 'Sans-serif', sans-serif;
+}
+
+.login-box {
+  background: #ffffff;
+  padding: 40px 30px;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+h1 {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 35px;
+  font-family: "Dancing Script", cursive;
+  font-size: 50px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+input {
+  all: unset;
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: white;
+  font-family: 'Sans-serif', sans-serif;
+  transition: border-color 0.2s ease;
+  box-sizing: border-box;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 2px rgba(54, 130, 127, 0.2);
+}
+
+.login-button {
+  all: unset;
+  width: 100%;
+  padding: 12px;
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  font-family: 'Sans-serif', sans-serif;
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.login-button:hover {
+  background-color: var(--secondary-color);
+}
+
+.signup-button {
+  margin-top: 12px;
+  color: var(--primary-color);
+  cursor: pointer;
+  text-align: center;
+  font-size: 17px;
+  text-decoration: none;
+  font-style: normal;
+  font-weight: 400;
+}
+
+.signup-button:hover {
+  color: var(--secondary-color);
+  text-decoration: underline;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  margin-top: 10px;
+}

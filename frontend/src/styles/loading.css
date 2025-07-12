@@ -1,0 +1,51 @@
+:root {
+    --primary-color: #36827f; /* Primary color */
+    --secondary-color: #54a7a4; /* Secondary color */
+    --secondary-color-light: #8dd0c7; /*Brighter secondary color8*/
+  }  
+
+/* Loading container to center the content */
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #fff;
+  }
+  
+  /* Glowing wave effect for the brand name */
+  .loading-text {
+    font-weight: bold;
+    font-family: "Dancing Script", cursive;
+    font-size: 60px; /* Increased font size */
+    letter-spacing: 3px;
+    animation: wave 2.5s ease-in-out infinite, move 3s linear infinite;
+    background: linear-gradient(90deg, var(--secondary-color-light), var(--primary-color));
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    color: transparent;
+  }
+  
+  /* Animation for simulating the wave effect in the background */
+  @keyframes wave {
+    0% {
+      background-position: 200% 0;
+    }
+    50% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
+  
+  /* Animation for moving the primary color from left to right */
+  @keyframes move {
+    0% {
+      background-position: 200% 0;
+    }
+    100% {
+      background-position: -200% 0;
+    }
+  }
+  

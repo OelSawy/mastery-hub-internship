@@ -1,0 +1,209 @@
+/* products.css - Updated with utility classes only */
+
+.view-products {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: #fffaf0;
+  font-family: 'Inter', sans-serif;
+}
+
+.content {
+  display: flex;
+  flex: 1;
+  padding: 20px;
+  gap: 20px;
+}
+
+.filters {
+  width: 260px;
+  background: white;
+  padding: 20px;
+  border-right: 1px solid #ddd;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+}
+
+.filters h3 {
+  font-family: "Dancing Script", cursive;
+  font-size: 26px;
+  margin-bottom: 20px;
+  color: #36827f;
+}
+
+.filters .mb-4 {
+  margin-bottom: 20px;
+}
+
+.products {
+  flex: 1;
+}
+
+.search-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.product-card {
+  display: flex;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  margin-bottom: 25px;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-3px);
+}
+
+.product-image-container {
+  width: 300px;
+  height: 200px;
+  background: #f7f7f7;
+  flex-shrink: 0;
+}
+
+.product-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-details {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.product-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.product-title {
+  font-size: 1.5rem;
+  color: #36827f;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+.product-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.product-description {
+  color: #444;
+  font-size: 15px;
+  margin: 10px 0;
+}
+
+.product-info {
+  font-size: 14px;
+  margin-bottom: 12px;
+  color: #555;
+}
+
+.product-footer {
+  margin-top: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.product-price {
+  color: #36827f;
+  font-size: 18px;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.edit-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  background-color: #36827f;
+  color: white;
+  border-radius: 5px;
+}
+
+.edit-button:hover {
+  background-color: #54a7a4;
+}
+
+#filter,
+#search {
+  padding: 10px 20px;
+  background-color: #36827f;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#filter:hover,
+#search:hover {
+  background-color: #54a7a4;
+}
+
+/* Utility classes */
+.mb-4 {
+  margin-bottom: 16px;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.space-x-2 > * + * {
+  margin-left: 8px;
+}
+
+.justify-between {
+  justify-content: space-between;
+}
+
+.text-sm {
+  font-size: 14px;
+}
+
+.mt-1 {
+  margin-top: 4px;
+}
+
+.text-lg {
+  font-size: 18px;
+}
+
+.font-semibold {
+  font-weight: 600;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.w-4 {
+  width: 16px;
+}
+
+.h-4 {
+  height: 16px;
+}
+
+.mr-2 {
+  margin-right: 8px;
+}
